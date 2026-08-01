@@ -1,0 +1,13 @@
+scripts:
+  kport:
+    path: scripts/kport.sh
+    description: "Kill process running on a port (usage: kport <port>)"
+  lsport:
+    path: scripts/lsport.sh
+    description: List all processes listening on ports
+  cleanbranches:
+    path: scripts/cleanbranches.sh
+    description: Delete all local branches already merged into main/master
+  serve:
+    path: scripts/serve.sh
+    description: "Start a local HTTP server in the current directory (usage: serve [port])"
