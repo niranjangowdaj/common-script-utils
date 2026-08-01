@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-# Description: Serve current directory on local network with a random passcode
+# Description: Serve current directory on local network with a random 4-digit PIN
 
 import sys
 import os
 import base64
 import random
-import string
 import socket
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
@@ -19,21 +18,25 @@ def get_local_ip():
     except Exception:
         return "localhost"
 
-def gen_passcode(length=8):
-    return "".join(random.choices(string.ascii_letters + string.digits, k=length))
-
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
-PASSCODE = gen_passcode()
-EXPECTED = base64.b64encode(f"odu:{PASSCODE}".encode()).decode()
+PIN = str(random.randint(1000, 9999))
 LOCAL_IP = get_local_ip()
 
 class AuthHandler(SimpleHTTPRequestHandler):
     def _authorized(self):
-        return self.headers.get("Authorization", "") == f"Basic {EXPECTED}"
+        auth = self.headers.get("Authorization", "")
+        if not auth.startswith("Basic "):
+            return False
+        try:
+            decoded = base64.b64decode(auth[6:]).decode()
+            _, _, password = decoded.partition(":")
+            return password == PIN
+        except Exception:
+            return False
 
     def _reject(self):
         self.send_response(401)
-        self.send_header("WWW-Authenticate", 'Basic realm="odu serve"')
+        self.send_header("WWW-Authenticate", 'Basic realm="Enter PIN"')
         self.send_header("Content-Length", "0")
         self.end_headers()
 
@@ -52,7 +55,7 @@ print(f"Serving: {os.getcwd()}")
 print(f"Local:   http://localhost:{PORT}")
 print(f"Network: http://{LOCAL_IP}:{PORT}")
 print(f"")
-print(f"  Passcode: {PASSCODE}")
+print(f"  PIN: {PIN}")
 print(f"")
 print(f"Press Ctrl+C to stop.")
 print(f"")

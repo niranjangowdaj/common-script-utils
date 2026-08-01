@@ -10,4 +10,4 @@ scripts:
     description: Delete all local branches already merged into main/master
   serve:
     path: scripts/serve.py
-    description: "Serve current directory on local network with a random passcode (usage: serve [port])"
+    description: "Serve current directory on local network with a random 4-digit PIN (usage: serve [port])"
