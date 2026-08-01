@@ -7,6 +7,7 @@ import base64
 import random
 import socket
 from http.server import SimpleHTTPRequestHandler, HTTPServer
+from socketserver import ThreadingMixIn
 
 def get_local_ip():
     try:
@@ -21,6 +22,9 @@ def get_local_ip():
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
 PIN = str(random.randint(1000, 9999))
 LOCAL_IP = get_local_ip()
+
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
 
 class AuthHandler(SimpleHTTPRequestHandler):
     def _authorized(self):
@@ -61,6 +65,6 @@ print(f"Press Ctrl+C to stop.")
 print(f"")
 
 try:
-    HTTPServer(("0.0.0.0", PORT), AuthHandler).serve_forever()
+    ThreadedHTTPServer(("0.0.0.0", PORT), AuthHandler).serve_forever()
 except KeyboardInterrupt:
     print("\nStopped.")
