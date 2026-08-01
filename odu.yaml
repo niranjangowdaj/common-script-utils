@@ -11,3 +11,9 @@ scripts:
   serve:
     path: scripts/serve.py
     description: "Serve current directory on local network with a random 4-digit PIN (usage: serve [port])"
+  lsjava:
+    path: scripts/lsjava.sh
+    description: List all installed Java versions on macOS
+  vjava:
+    path: scripts/vjava.sh
+    description: "Switch Java version on macOS (usage: vjava <version>)"
