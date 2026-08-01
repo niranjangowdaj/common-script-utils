@@ -9,5 +9,5 @@ scripts:
     path: scripts/cleanbranches.sh
     description: Delete all local branches already merged into main/master
   serve:
-    path: scripts/serve.sh
-    description: "Start a local HTTP server in the current directory (usage: serve [port])"
+    path: scripts/serve.py
+    description: "Serve current directory on local network with a random passcode (usage: serve [port])"
